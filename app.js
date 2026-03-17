@@ -1,120 +1,97 @@
-let fotoBase64 = ""
+// CONFIG FIREBASE
+const firebaseConfig = {
+  apiKey: "SUA_KEY",
+  authDomain: "SEU_DOMINIO",
+  projectId: "SEU_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// CONFIG CLOUDINARY
+const CLOUD_NAME = "SEU_CLOUD_NAME";
+const UPLOAD_PRESET = "SEU_PRESET";
+
+// UPLOAD IMAGEM
+async function uploadImagem(file){
+  let formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
+
+  let res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+    method: "POST",
+    body: formData
+  });
+
+  let data = await res.json();
+  return data.secure_url;
+}
+
+// CADASTRAR PET
+async function cadastrar(){
+
+let nome = document.getElementById("nome").value;
+let tutor = document.getElementById("tutor").value;
+let telefone = document.getElementById("telefone").value.replace(/\D/g,"");
+let file = document.getElementById("foto").files[0];
+
+if(!file){
+alert("Envie a foto");
+return;
+}
 
 // upload imagem
-document.getElementById("foto").addEventListener("change", function(){
+let fotoURL = await uploadImagem(file);
 
-let file = this.files[0]
-if(!file) return
-
-let reader = new FileReader()
-
-reader.onload = function(e){
-fotoBase64 = e.target.result
-document.getElementById("preview").src = fotoBase64
-}
-
-reader.readAsDataURL(file)
-
-})
-
-// máscara telefone
-document.getElementById("telefone").addEventListener("input", function(e){
-
-let v = e.target.value.replace(/\D/g,"")
-
-v = v.replace(/^(\d{2})(\d)/g,"($1) $2")
-v = v.replace(/(\d{5})(\d)/,"$1-$2")
-
-e.target.value = v
-
-})
-
-// cadastrar
-function cadastrar(){
-
-let nome = document.getElementById("nome").value
-let tutor = document.getElementById("tutor").value
-let telefone = document.getElementById("telefone").value.replace(/\D/g,"")
-
-if(!nome || !tutor || !telefone || !fotoBase64){
-alert("Preencha todos os campos!")
-return
-}
-
-let id = Date.now()
-
-let pet = {
-id,
+// salvar no firestore
+let doc = await db.collection("pets").add({
 nome,
 tutor,
 telefone,
-foto: fotoBase64
-}
+foto: fotoURL
+});
 
-localStorage.setItem("pet_"+id, JSON.stringify(pet))
+// gerar QR
+gerarQR(doc.id);
 
-render()
-
-alert("Pet cadastrado com sucesso!")
-
-}
-
-// listar pets
-function render(){
-
-let lista = document.getElementById("lista")
-lista.innerHTML = ""
-
-for(let key in localStorage){
-
-if(key.startsWith("pet_")){
-
-let pet = JSON.parse(localStorage.getItem(key))
-
-lista.innerHTML += `
-<div class="card">
-
-<img src="${pet.foto}" class="pet-img">
-
-<p><b>${pet.nome}</b></p>
-
-<button onclick="abrirPet(${pet.id})">👁 Ver</button>
-
-<button onclick="gerarQR(${pet.id})">🏷 QR SVG</button>
-
-</div>
-`
+alert("Pet cadastrado com sucesso!");
 
 }
 
-}
-
-}
-
-// abrir página do pet
-function abrirPet(id){
-
-let link = "https://toquemagico3d.github.io/qr-pet/pet.html?id=" + id
-
-window.open(link, "_blank")
-
-}
-
-// gerar QR SVG
+// GERAR QR SVG
 function gerarQR(id){
 
-let link = "https://toquemagico3d.github.io/qr-pet/pet.html?id=" + id
+let link = `https://toquemagico3d.github.io/qr-pet/pet.html?id=${id}`;
 
-let qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=500x500&format=svg&data=" + encodeURIComponent(link)
+let qr = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=svg&data=${encodeURIComponent(link)}`;
 
-// download automático
-let a = document.createElement("a")
-a.href = qrUrl
-a.download = "qr_pet_"+id+".svg"
-document.body.appendChild(a)
-a.click()
-document.body.removeChild(a)
+document.getElementById("qrcode").innerHTML =
+`<p>QR Code:</p>
+<img src="${qr}">
+<br>
+<a href="${qr}" download="qrcode.svg">⬇ Baixar SVG</a>`;
 
 }
 
-render()
+// CARREGAR PET
+if(window.location.pathname.includes("pet.html")){
+
+let id = new URLSearchParams(window.location.search).get("id");
+
+db.collection("pets").doc(id).get().then(doc=>{
+
+let pet = doc.data();
+
+document.getElementById("foto").src = pet.foto;
+document.getElementById("nome").innerText = pet.nome;
+document.getElementById("tutor").innerText = "Tutor: "+pet.tutor;
+
+document.getElementById("ligar").href = "tel:"+pet.telefone;
+
+document.getElementById("zap").href =
+"https://wa.me/55"+pet.telefone+
+"?text=Encontrei seu pet "+pet.nome;
+
+});
+
+}
