@@ -42,7 +42,7 @@ return;
 
 try{
 
-let fotoURL = await uploadImagem(file);
+let fotoURL = await uploadImage(file);
 
 let doc = await db.collection("pets").add({
 nome,
