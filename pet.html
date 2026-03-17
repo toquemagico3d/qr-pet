@@ -21,6 +21,8 @@
 <a id="ligar" class="btn ligar">📞 Ligar</a>
 <a id="zap" class="btn whatsapp">💬 WhatsApp</a>
 
+<br><br>
+
 <button onclick="encontrei()">📍 ENCONTREI ESTE PET</button>
 
 </div>
@@ -30,18 +32,27 @@
 let id = new URLSearchParams(location.search).get("id")
 let pet = JSON.parse(localStorage.getItem("pet_"+id))
 
-foto.src = pet.foto
-nome.innerText = pet.nome
-tutor.innerText = "Tutor: "+pet.tutor
+if(!pet){
+document.body.innerHTML = "<h2>Pet não encontrado 😢</h2>"
+}
 
-ligar.href = "tel:"+pet.telefone
-zap.href = "https://wa.me/55"+pet.telefone+"?text=Encontrei seu pet "+pet.nome
+// preencher dados
+document.getElementById("foto").src = pet.foto
+document.getElementById("nome").innerText = pet.nome
+document.getElementById("tutor").innerText = "Tutor: " + pet.tutor
 
+document.getElementById("ligar").href = "tel:" + pet.telefone
+
+document.getElementById("zap").href =
+"https://wa.me/55"+pet.telefone+"?text=Encontrei seu pet "+pet.nome
+
+// botão localização
 function encontrei(){
 
-navigator.geolocation.getCurrentPosition(pos=>{
+navigator.geolocation.getCurrentPosition(function(pos){
 
-let map = "https://maps.google.com/?q="+pos.coords.latitude+","+pos.coords.longitude
+let map =
+"https://maps.google.com/?q="+pos.coords.latitude+","+pos.coords.longitude
 
 window.open(
 "https://wa.me/55"+pet.telefone+
