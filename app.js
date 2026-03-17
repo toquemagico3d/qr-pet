@@ -72,13 +72,14 @@ lista.innerHTML += `
 
 function gerarQR(id){
 
-let base = location.origin + location.pathname.replace("index.html","")
+let link = "https://toquemagico3d.github.io/qr-pet/pet.html?id=" + id
 
-let link = base + "pet.html?id=" + id
+alert("Link do Pet:\n" + link)
 
-alert("Link do Pet:\n"+link)
+// gerar QR SVG
+let qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&data=" + encodeURIComponent(link)
 
-gerarQRCodeSVG(link)
+window.open(qrUrl, "_blank")
 
 }
 
