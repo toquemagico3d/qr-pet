@@ -16,9 +16,17 @@
 
 <input id="tutor" placeholder="Nome do Tutor">
 
-<input id="telefone" placeholder="WhatsApp">
+<input id="telefone" placeholder="WhatsApp" maxlength="15">
 
-<input id="foto" placeholder="Link da Foto">
+<br><br>
+
+<input type="file" id="foto" accept="image/*">
+
+<br><br>
+
+<img id="preview" style="width:150px;border-radius:50%">
+
+<br><br>
 
 <button onclick="salvarPet()">Cadastrar</button>
 
