@@ -31,14 +31,14 @@ window.addEventListener("load", function(){
       div.className = "card";
 
       div.innerHTML = `
-        <img src="${pet.foto}">
-        <h3>${pet.nome}</h3>
-        <p>${pet.tutor}</p>
+  <img src="${pet.foto}">
+  <h3>${pet.nome}</h3>
+  <p>${pet.tutor}</p>
 
-        <button onclick="reemitirQR('${doc.id}')">🏷 QR</button>
-        <button onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
-        <button onclick="excluirPet('${doc.id}')">❌ Excluir</button>
-      `;
+  <button onclick="reemitirQR('${doc.id}')">🏷 QR</button>
+  <button onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
+  <button onclick="excluirPet('${doc.id}')">❌ Excluir</button>
+`;
 
       lista.appendChild(div);
 
