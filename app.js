@@ -72,9 +72,13 @@ lista.innerHTML += `
 
 function gerarQR(id){
 
-let link = location.origin + location.pathname.replace("index.html","") + "pet.html?id="+id
+let base = location.origin + location.pathname.replace("index.html","")
 
-alert("Link do Pet:\n"+link+"\n\nUse esse link no QR Code")
+let link = base + "pet.html?id=" + id
+
+alert("Link do Pet:\n"+link)
+
+gerarQRCodeSVG(link)
 
 }
 
