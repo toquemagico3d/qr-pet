@@ -1,51 +1,167 @@
-// =========================
-// 🧑‍💻 PAINEL ADMIN (EXECUÇÃO GARANTIDA)
-// =========================
-window.addEventListener("load", function(){
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel de Pets</title>
 
-  let lista = document.getElementById("lista");
-
-  if(!lista){
-    console.log("Não é página admin");
-    return;
-  }
-
-  console.log("PAINEL INICIADO 🚀");
-
-  db.collection("pets").get().then(snapshot => {
-
-    console.log("Pets encontrados:", snapshot.size);
-
-    lista.innerHTML = "";
-
-    if(snapshot.empty){
-      lista.innerHTML = "<p>Nenhum pet cadastrado</p>";
-      return;
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f5f5f5;
     }
 
-    snapshot.forEach(doc => {
+    h1 {
+      margin-bottom: 20px;
+    }
 
-      let pet = doc.data();
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
 
-      let div = document.createElement("div");
-      div.className = "card";
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
 
-   div.innerHTML = `
-  <img src=`${pet.foto}`>
-  <h3>${pet.nome}</h3>
-  <p>${pet.tutor}</p>
+    .card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
 
-  <button onclick="reemitirQR('${doc.id}')">🏷 QR</button>
-  <button onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
-  <button onclick="excluirPet('${doc.id}')">❌ Excluir</button>
-`;
+    button {
+      margin: 5px;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-      lista.appendChild(div);
+    .qr { background: #4CAF50; color: white; }
+    .edit { background: #2196F3; color: white; }
+    .del { background: #f44336; color: white; }
+
+  </style>
+</head>
+
+<body>
+
+  <h1>🐶 Painel de Pets</h1>
+
+  <div id="lista" class="grid"></div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script>
+    // 🔥 CONFIG FIREBASE (usa o seu mesmo config)
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_DOMINIO",
+      projectId: "SEU_PROJECT_ID",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // =========================
+    // 🧑‍💻 PAINEL ADMIN
+    // =========================
+    window.addEventListener("load", function(){
+
+      let lista = document.getElementById("lista");
+
+      console.log("Painel carregado 🚀");
+
+      db.collection("pets").get().then(snapshot => {
+
+        lista.innerHTML = "";
+
+        if(snapshot.empty){
+          lista.innerHTML = "<p>Nenhum pet cadastrado</p>";
+          return;
+        }
+
+        snapshot.forEach(doc => {
+
+          let pet = doc.data();
+
+          let div = document.createElement("div");
+          div.className = "card";
+
+          // ✅ USANDO CRASE (CORRIGIDO)
+          div.innerHTML = `
+            <img src="${pet.foto || 'https://via.placeholder.com/100'}">
+            <h3>${pet.nome}</h3>
+            <p>${pet.tutor}</p>
+
+            <button class="qr" onclick="reemitirQR('${doc.id}')">🏷 QR</button>
+            <button class="edit" onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
+            <button class="del" onclick="excluirPet('${doc.id}')">❌ Excluir</button>
+          `;
+
+          lista.appendChild(div);
+
+        });
+
+      });
 
     });
 
-  }).catch(err => {
-    console.error("ERRO FIREBASE:", err);
-  });
+    // =========================
+    // 🔁 REEMITIR QR
+    // =========================
+    function reemitirQR(id){
+      const url = `https://toquemagico3d.github.io/qr-pet/?id=${id}`;
+      window.open(url, "_blank");
+    }
 
-});
+    // =========================
+    // ✏️ EDITAR
+    // =========================
+    function editarPet(id, nome, tutor, telefone){
+
+      let novoNome = prompt("Nome do pet:", nome);
+      let novoTutor = prompt("Nome do tutor:", tutor);
+      let novoTel = prompt("Telefone:", telefone);
+
+      if(!novoNome) return;
+
+      db.collection("pets").doc(id).update({
+        nome: novoNome,
+        tutor: novoTutor,
+        telefone: novoTel
+      }).then(() => {
+        alert("Atualizado!");
+        location.reload();
+      });
+
+    }
+
+    // =========================
+    // ❌ EXCLUIR
+    // =========================
+    function excluirPet(id){
+
+      if(confirm("Deseja excluir este pet?")){
+        db.collection("pets").doc(id).delete().then(() => {
+          alert("Excluído!");
+          location.reload();
+        });
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
