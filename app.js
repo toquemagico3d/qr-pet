@@ -132,8 +132,13 @@ if(window.location.pathname.includes("pet.html")){
                     let lat = pos.coords.latitude;
                     let lng = pos.coords.longitude;
 
-                    let msg = `Encontrei seu pet ${pet.nome}!\n📍 https://maps.google.com/?q=${lat},${lng}`;
+                    let msg = `🐶 PET ENCONTRADO!
 
+                    Olá! Encontrei o pet *${pet.nome}*.
+
+                    📍 Localização:https://maps.google.com/?q=${lat},${lng}
+
+                    Por favor entre em contato o quanto antes 🙏`;
                     abrirWhats(msg);
 
                   },
