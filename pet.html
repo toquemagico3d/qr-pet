@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pet</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
+<body>
+
+<div class="container">
+
+<h2>🐶 Encontrei este Pet</h2>
+
+<img id="foto" class="pet-img">
+
+<h1 id="nome"></h1>
+
+<p id="tutor"></p>
+
+<a id="ligar" class="btn ligar">📞 Ligar</a>
+
+<a id="zap" class="btn whatsapp">💬 WhatsApp</a>
+
+<button onclick="encontrei()">📍 ENCONTREI ESTE PET</button>
+
+</div>
+
+<script>
+
+let url = new URLSearchParams(window.location.search)
+let id = url.get("id")
+
+let pet = JSON.parse(localStorage.getItem("pet_"+id))
+
+document.getElementById("foto").src = pet.foto
+document.getElementById("nome").innerText = pet.nome
+document.getElementById("tutor").innerText = "Tutor: "+pet.tutor
+
+document.getElementById("ligar").href="tel:"+pet.telefone
+
+document.getElementById("zap").href=
+"https://wa.me/"+pet.telefone+"?text=Encontrei seu pet "+pet.nome
+
+function encontrei(){
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
+let link =
+"https://maps.google.com/?q="+pos.coords.latitude+","+pos.coords.longitude
+
+window.open(
+"https://wa.me/"+pet.telefone+
+"?text=Encontrei seu pet "+pet.nome+
+" localização: "+link
+)
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
