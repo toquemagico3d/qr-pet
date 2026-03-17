@@ -1,52 +1,48 @@
 body{
-font-family:Arial;
+font-family: Arial;
 background:#f2f2f2;
 text-align:center;
-}
-
-.container{
-max-width:400px;
-margin:auto;
-background:white;
 padding:20px;
-border-radius:20px;
-margin-top:30px;
 }
 
-.pet-img{
-width:150px;
-height:150px;
-border-radius:50%;
-object-fit:cover;
-margin:10px;
+h1{
+color:#333;
+}
+
+input{
+display:block;
+margin:10px auto;
+padding:12px;
+width:80%;
+max-width:300px;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 button{
-padding:12px;
-margin:5px;
+padding:12px 20px;
+background:#00c853;
+color:#fff;
 border:none;
 border-radius:10px;
-background:#ff6600;
-color:white;
-font-weight:bold;
-cursor:pointer;
+font-size:16px;
 }
 
 .btn{
 display:block;
-margin:10px;
-padding:15px;
-border-radius:10px;
+margin:10px auto;
+padding:12px;
+background:#2962ff;
+color:#fff;
 text-decoration:none;
-color:white;
+border-radius:10px;
+width:200px;
 }
 
-.ligar{background:#007bff;}
-.whatsapp{background:#25d366;}
-
-.card{
-background:#eee;
-padding:10px;
-margin:10px;
-border-radius:10px;
+.foto{
+width:200px;
+height:200px;
+border-radius:50%;
+object-fit:cover;
+margin:20px;
 }
