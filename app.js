@@ -79,3 +79,10 @@ alert("Link do Pet:\n"+link+"\n\nUse esse link no QR Code")
 }
 
 render()
+function gerarQRCodeSVG(link){
+
+let qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&format=svg&data=" + encodeURIComponent(link)
+
+window.open(qrUrl)
+
+}
