@@ -121,9 +121,15 @@
     // 🔁 REEMITIR QR
     // =========================
     function reemitirQR(id){
-      const url = `https://toquemagico3d.github.io/qr-pet/?id=${id}`;
-      window.open(url, "_blank");
-    }
+
+    const urlPet = `https://toquemagico3d.github.io/qr-pet/?id=${id}`;
+
+    const qrAPI = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(urlPet)}`;
+
+    // abre o QR em nova aba
+    window.open(qrAPI, "_blank");
+
+}
 
     // =========================
     // ✏️ EDITAR
