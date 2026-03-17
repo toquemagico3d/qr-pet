@@ -2,32 +2,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>QR Pet - Toque Mágico 3D</title>
+<title>Cadastro Pet</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<h1>🐶 Cadastro do Pet</h1>
 
-<h2>🐶 Cadastro de Pet</h2>
-
-<input id="nome" placeholder="Nome do Pet">
-<input id="tutor" placeholder="Nome do Tutor">
-<input id="telefone" placeholder="WhatsApp" maxlength="15">
-
-<input type="file" id="foto" accept="image/*">
-
-<img id="preview" class="pet-img">
+<input id="nome" placeholder="Nome do pet">
+<input id="tutor" placeholder="Nome do tutor">
+<input id="telefone" placeholder="WhatsApp (DDD + número)">
+<input type="file" id="foto">
 
 <button onclick="cadastrar()">Cadastrar Pet</button>
 
-<hr>
+<div id="qrcode"></div>
 
-<h3>📋 Pets cadastrados</h3>
-<div id="lista"></div>
-
-</div>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <script src="app.js"></script>
 
