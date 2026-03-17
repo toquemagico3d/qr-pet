@@ -51,6 +51,21 @@ telefone,
 foto: fotoURL
 });
 
+  // 🏷 GERAR QR CODE
+function gerarQR(id){
+
+let link = `https://toquemagico3d.github.io/qr-pet/pet.html?id=${id}`;
+
+let qr = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=svg&data=${encodeURIComponent(link)}`;
+
+document.getElementById("qrcode").innerHTML = `
+<h3>QR Code:</h3>
+<img src="${qr}">
+<br>
+<a href="${qr}" download="qrcode.svg">⬇ Baixar SVG</a>
+`;
+
+}
 gerarQR(doc.id);
 
 alert("✅ Pet cadastrado!");
