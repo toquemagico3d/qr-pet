@@ -2,69 +2,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Pet</title>
+<title>Pet Encontrado</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<h1>🐶 Encontrei este Pet</h1>
 
-<h2>🐶 Encontrei este Pet</h2>
-
-<img id="foto" class="pet-img">
-
-<h1 id="nome"></h1>
-
+<img id="foto" class="foto">
+<h2 id="nome"></h2>
 <p id="tutor"></p>
 
-<a id="ligar" class="btn ligar">📞 Ligar</a>
-<a id="zap" class="btn whatsapp">💬 WhatsApp</a>
-
+<a id="ligar">📞 Ligar</a>
 <br><br>
+<a id="zap">💬 WhatsApp</a>
 
-<button onclick="encontrei()">📍 ENCONTREI ESTE PET</button>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-</div>
-
-<script>
-
-let id = new URLSearchParams(location.search).get("id")
-let pet = JSON.parse(localStorage.getItem("pet_"+id))
-
-if(!pet){
-document.body.innerHTML = "<h2>Pet não encontrado 😢</h2>"
-}
-
-// preencher dados
-document.getElementById("foto").src = pet.foto
-document.getElementById("nome").innerText = pet.nome
-document.getElementById("tutor").innerText = "Tutor: " + pet.tutor
-
-document.getElementById("ligar").href = "tel:" + pet.telefone
-
-document.getElementById("zap").href =
-"https://wa.me/55"+pet.telefone+"?text=Encontrei seu pet "+pet.nome
-
-// botão localização
-function encontrei(){
-
-navigator.geolocation.getCurrentPosition(function(pos){
-
-let map =
-"https://maps.google.com/?q="+pos.coords.latitude+","+pos.coords.longitude
-
-window.open(
-"https://wa.me/55"+pet.telefone+
-"?text=Encontrei seu pet "+pet.nome+
-" localização: "+map
-)
-
-})
-
-}
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
