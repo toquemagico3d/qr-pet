@@ -1,55 +1,46 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Admin</title>
+// =========================
+// 🧑‍💻 PAINEL ADMIN (FORÇA EXECUÇÃO)
+// =========================
+let lista = document.getElementById("lista");
 
-<style>
-body{
-  font-family: Arial;
-  text-align:center;
+if(lista){
+
+  console.log("Painel carregado ✅");
+
+  db.collection("pets").onSnapshot(snapshot=>{
+
+    console.log("Pets encontrados:", snapshot.size);
+
+    lista.innerHTML = "";
+
+    if(snapshot.empty){
+      lista.innerHTML = "<p>Nenhum pet cadastrado</p>";
+      return;
+    }
+
+    snapshot.forEach(doc=>{
+
+      let pet = doc.data();
+
+      let div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <img src="${pet.foto}">
+        <h3>${pet.nome}</h3>
+        <p>${pet.tutor}</p>
+
+        <button class="qr" onclick="reemitirQR('${doc.id}')">🏷 QR</button>
+        <button class="editar" onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
+        <button class="excluir" onclick="excluirPet('${doc.id}')">❌ Excluir</button>
+      `;
+
+      lista.appendChild(div);
+
+    });
+
+  }, error => {
+    console.error("Erro Firestore:", error);
+  });
+
 }
-
-.card{
-  border:1px solid #ddd;
-  margin:10px;
-  padding:10px;
-  border-radius:10px;
-}
-
-img{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  object-fit:cover;
-}
-
-button{
-  margin:5px;
-  padding:8px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.excluir{background:red;color:white;}
-.editar{background:orange;color:white;}
-.qr{background:green;color:white;}
-</style>
-
-</head>
-
-<body>
-
-<h1>🐶 Painel de Pets</h1>
-
-<div id="lista"></div>
-
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
-<script src="app.js"></script>
-
-</body>
-</html>
