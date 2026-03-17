@@ -1,13 +1,18 @@
 // =========================
-// 🧑‍💻 PAINEL ADMIN (FORÇA EXECUÇÃO)
+// 🧑‍💻 PAINEL ADMIN (EXECUÇÃO GARANTIDA)
 // =========================
-let lista = document.getElementById("lista");
+window.addEventListener("load", function(){
 
-if(lista){
+  let lista = document.getElementById("lista");
 
-  console.log("Painel carregado ✅");
+  if(!lista){
+    console.log("Não é página admin");
+    return;
+  }
 
-  db.collection("pets").onSnapshot(snapshot=>{
+  console.log("PAINEL INICIADO 🚀");
+
+  db.collection("pets").get().then(snapshot => {
 
     console.log("Pets encontrados:", snapshot.size);
 
@@ -18,7 +23,7 @@ if(lista){
       return;
     }
 
-    snapshot.forEach(doc=>{
+    snapshot.forEach(doc => {
 
       let pet = doc.data();
 
@@ -30,17 +35,17 @@ if(lista){
         <h3>${pet.nome}</h3>
         <p>${pet.tutor}</p>
 
-        <button class="qr" onclick="reemitirQR('${doc.id}')">🏷 QR</button>
-        <button class="editar" onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
-        <button class="excluir" onclick="excluirPet('${doc.id}')">❌ Excluir</button>
+        <button onclick="reemitirQR('${doc.id}')">🏷 QR</button>
+        <button onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
+        <button onclick="excluirPet('${doc.id}')">❌ Excluir</button>
       `;
 
       lista.appendChild(div);
 
     });
 
-  }, error => {
-    console.error("Erro Firestore:", error);
+  }).catch(err => {
+    console.error("ERRO FIREBASE:", err);
   });
 
-}
+});
