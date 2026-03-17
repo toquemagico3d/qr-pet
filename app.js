@@ -20,7 +20,6 @@ const UPLOAD_PRESET = "qrpet_upload";
 // UPLOAD IMAGEM
 // =========================
 async function uploadImagem(file){
-
   let formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
@@ -35,7 +34,7 @@ async function uploadImagem(file){
 }
 
 // =========================
-// 🏷 GERAR QR CODE
+// GERAR QR CODE
 // =========================
 function gerarQR(id){
 
@@ -52,7 +51,7 @@ function gerarQR(id){
 }
 
 // =========================
-// 🐶 CADASTRAR
+// CADASTRAR PET
 // =========================
 async function cadastrar(){
 
@@ -88,7 +87,7 @@ async function cadastrar(){
 }
 
 // =========================
-// 🐶 CARREGAR PET + WHATS + LOCALIZAÇÃO
+// CARREGAR PET + BOTÕES
 // =========================
 if(window.location.pathname.includes("pet.html")){
 
@@ -108,51 +107,52 @@ if(window.location.pathname.includes("pet.html")){
 
         document.getElementById("ligar").href = "tel:" + pet.telefone;
 
-        // 🔥 BOTÃO WHATSAPP FUNCIONANDO 100%
-        document.getElementById("zap").addEventListener("click", function(){
+        // 🔥 BOTÃO WHATSAPP (VERSÃO GARANTIDA)
+        setTimeout(() => {
 
-          let telefone = pet.telefone;
+          let btn = document.getElementById("zap");
 
-          if(navigator.geolocation){
+          if(btn){
 
-            navigator.geolocation.getCurrentPosition(
+            btn.onclick = function(){
 
-              function(pos){
+              let telefone = pet.telefone;
 
-                let lat = pos.coords.latitude;
-                let lng = pos.coords.longitude;
-
-                let msg = `Encontrei seu pet ${pet.nome}!\n📍 Localização: https://maps.google.com/?q=${lat},${lng}`;
-
+              function abrirWhats(msg){
                 let url = `https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`;
-
-                window.open(url, "_blank");
-
-              },
-
-              function(error){
-
-                let msg = `Encontrei seu pet ${pet.nome}! (Não consegui pegar a localização)`;
-
-                let url = `https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`;
-
-                window.open(url, "_blank");
-
+                window.location.href = url;
               }
 
-            );
+              if(navigator.geolocation){
 
-          }else{
+                navigator.geolocation.getCurrentPosition(
 
-            let msg = `Encontrei seu pet ${pet.nome}!`;
+                  function(pos){
 
-            let url = `https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`;
+                    let lat = pos.coords.latitude;
+                    let lng = pos.coords.longitude;
 
-            window.open(url, "_blank");
+                    let msg = `Encontrei seu pet ${pet.nome}!\n📍 https://maps.google.com/?q=${lat},${lng}`;
+
+                    abrirWhats(msg);
+
+                  },
+
+                  function(){
+                    abrirWhats(`Encontrei seu pet ${pet.nome}! (sem localização)`);
+                  }
+
+                );
+
+              }else{
+                abrirWhats(`Encontrei seu pet ${pet.nome}!`);
+              }
+
+            };
 
           }
 
-        });
+        }, 500);
 
       }else{
         document.body.innerHTML = "<h2>Pet não encontrado</h2>";
