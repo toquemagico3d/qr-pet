@@ -46,3 +46,20 @@ border-radius:50%;
 object-fit:cover;
 margin:20px;
 }
+.btn{
+  display:block;
+  margin:10px auto;
+  padding:14px;
+  width:220px;
+  background:#25D366;
+  color:white;
+  text-decoration:none;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:16px;
+  border:none;
+}
+
+.btn:active{
+  transform:scale(0.97);
+}
