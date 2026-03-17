@@ -164,6 +164,90 @@ if(window.location.pathname.includes("pet.html")){
       }
 
     });
+    // =========================
+// 🧑‍💻 PAINEL ADMIN
+// =========================
+if(window.location.pathname.includes("admin.html")){
+
+  let lista = document.getElementById("lista");
+
+  db.collection("pets").onSnapshot(snapshot=>{
+
+    lista.innerHTML = "";
+
+    snapshot.forEach(doc=>{
+
+      let pet = doc.data();
+
+      let div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <img src="${pet.foto}">
+        <h3>${pet.nome}</h3>
+        <p>${pet.tutor}</p>
+
+        <button class="qr" onclick="reemitirQR('${doc.id}')">🏷 QR</button>
+        <button class="editar" onclick="editarPet('${doc.id}','${pet.nome}','${pet.tutor}','${pet.telefone}')">✏️ Editar</button>
+        <button class="excluir" onclick="excluirPet('${doc.id}')">❌ Excluir</button>
+      `;
+
+      lista.appendChild(div);
+
+    });
+
+  });
+
+}
+
+// =========================
+// EXCLUIR
+// =========================
+function excluirPet(id){
+  if(confirm("Excluir pet?")){
+    db.collection("pets").doc(id).delete();
+  }
+}
+
+// =========================
+// EDITAR
+// =========================
+function editarPet(id, nome, tutor, telefone){
+
+  let novoNome = prompt("Nome:", nome);
+  let novoTutor = prompt("Tutor:", tutor);
+  let novoTel = prompt("Telefone:", telefone);
+
+  if(novoNome && novoTutor && novoTel){
+
+    db.collection("pets").doc(id).update({
+      nome: novoNome,
+      tutor: novoTutor,
+      telefone: novoTel
+    });
+
+  }
+
+}
+
+// =========================
+// REEMITIR QR
+// =========================
+function reemitirQR(id){
+
+  let link = `https://toquemagico3d.github.io/qr-pet/pet.html?id=${id}`;
+
+  let qr = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=svg&data=${encodeURIComponent(link)}`;
+
+  let win = window.open("");
+  win.document.write(`
+    <h2>QR Code</h2>
+    <img src="${qr}">
+    <br><br>
+    <a href="${qr}" download="qrcode.svg">⬇ Baixar SVG</a>
+  `);
+
+}
 
   }
 
