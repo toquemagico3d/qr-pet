@@ -35,7 +35,7 @@ async function uploadImagem(file){
 }
 
 // =========================
-// 🏷 GERAR QR CODE (FORA!)
+// 🏷 GERAR QR CODE
 // =========================
 function gerarQR(id){
 
@@ -88,7 +88,7 @@ async function cadastrar(){
 }
 
 // =========================
-// 🐶 CARREGAR PET + LOCALIZAÇÃO
+// 🐶 CARREGAR PET + WHATS + LOCALIZAÇÃO
 // =========================
 if(window.location.pathname.includes("pet.html")){
 
@@ -108,29 +108,51 @@ if(window.location.pathname.includes("pet.html")){
 
         document.getElementById("ligar").href = "tel:" + pet.telefone;
 
-        // 📍 WHATS COM LOCALIZAÇÃO
-        document.getElementById("zap").onclick = function(){
+        // 🔥 BOTÃO WHATSAPP FUNCIONANDO 100%
+        document.getElementById("zap").addEventListener("click", function(){
+
+          let telefone = pet.telefone;
 
           if(navigator.geolocation){
 
-            navigator.geolocation.getCurrentPosition(function(pos){
+            navigator.geolocation.getCurrentPosition(
 
-              let lat = pos.coords.latitude;
-              let lng = pos.coords.longitude;
+              function(pos){
 
-              let msg = `Encontrei seu pet ${pet.nome}!\nLocalização: https://maps.google.com/?q=${lat},${lng}`;
+                let lat = pos.coords.latitude;
+                let lng = pos.coords.longitude;
 
-              window.open(`https://wa.me/55${pet.telefone}?text=${encodeURIComponent(msg)}`);
+                let msg = `Encontrei seu pet ${pet.nome}!\n📍 Localização: https://maps.google.com/?q=${lat},${lng}`;
 
-            });
+                let url = `https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`;
+
+                window.open(url, "_blank");
+
+              },
+
+              function(error){
+
+                let msg = `Encontrei seu pet ${pet.nome}! (Não consegui pegar a localização)`;
+
+                let url = `https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`;
+
+                window.open(url, "_blank");
+
+              }
+
+            );
 
           }else{
 
-            window.open(`https://wa.me/55${pet.telefone}?text=Encontrei seu pet ${pet.nome}`);
+            let msg = `Encontrei seu pet ${pet.nome}!`;
+
+            let url = `https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`;
+
+            window.open(url, "_blank");
 
           }
 
-        };
+        });
 
       }else{
         document.body.innerHTML = "<h2>Pet não encontrado</h2>";
