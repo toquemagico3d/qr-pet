@@ -1,16 +1,16 @@
 // CONFIG FIREBASE
 const firebaseConfig = {
-  apiKey: "SUA_KEY",
-  authDomain: "SEU_DOMINIO",
-  projectId: "SEU_ID"
+  apiKey: "AIzaSyDm8_-__qUDqp34BGLCbaHks8wTGyj3krE",
+  authDomain: "qr-pet-toque-magico.firebaseapp.com",
+  projectId: "qr-pet-toque-magico"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // CONFIG CLOUDINARY
-const CLOUD_NAME = "SEU_CLOUD_NAME";
-const UPLOAD_PRESET = "SEU_PRESET";
+const CLOUD_NAME = "toque-magico-3d";
+const UPLOAD_PRESET = "qrpet_upload";
 
 // UPLOAD IMAGEM
 async function uploadImagem(file){
@@ -18,7 +18,7 @@ async function uploadImagem(file){
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
 
-  let res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+  let res = await fetch(`https://api.cloudinary.com/v1_1/${toque-magico-3d}/image/upload`, {
     method: "POST",
     body: formData
   });
