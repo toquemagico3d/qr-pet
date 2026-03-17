@@ -18,7 +18,7 @@ async function uploadImagem(file){
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
 
-  let res = await fetch(`https://api.cloudinary.com/v1_1/${toque-magico-3d}/image/upload`, {
+  let res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
     method: "POST",
     body: formData
   });
@@ -27,7 +27,7 @@ async function uploadImagem(file){
   return data.secure_url;
 }
 
-// 🐶 CADASTRO
+// CADASTRAR
 async function cadastrar(){
 
 let nome = document.getElementById("nome").value;
@@ -42,7 +42,7 @@ return;
 
 try{
 
-let fotoURL = await uploadImage(file);
+let fotoURL = await uploadImagem(file);
 
 let doc = await db.collection("pets").add({
 nome,
@@ -57,55 +57,6 @@ alert("✅ Pet cadastrado!");
 
 }catch(e){
 alert("Erro: " + e.message);
-}
-
-}
-
-// 🏷 QR SVG
-function gerarQR(id){
-
-let link = `https://toquemagico3d.github.io/qr-pet/pet.html?id=${id}`;
-
-let qr = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=svg&data=${encodeURIComponent(link)}`;
-
-document.getElementById("qrcode").innerHTML = `
-<h3>QR Code:</h3>
-<img src="${qr}">
-<br>
-<a href="${qr}" download="qrcode.svg">⬇ Baixar SVG</a>
-`;
-
-}
-
-// 🐶 CARREGAR PET
-if(window.location.pathname.includes("pet.html")){
-
-let id = new URLSearchParams(location.search).get("id");
-
-if(id){
-
-db.collection("pets").doc(id).get().then(doc=>{
-
-if(doc.exists){
-
-let pet = doc.data();
-
-foto.src = pet.foto;
-nome.innerText = pet.nome;
-tutor.innerText = "Tutor: " + pet.tutor;
-
-ligar.href = "tel:" + pet.telefone;
-
-zap.href =
-"https://wa.me/55"+pet.telefone+
-"?text=Encontrei seu pet "+pet.nome;
-
-}else{
-document.body.innerHTML = "<h2>Pet não encontrado</h2>";
-}
-
-});
-
 }
 
 }
