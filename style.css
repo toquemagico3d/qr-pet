@@ -1,1 +1,44 @@
+body{
+font-family: Arial;
+background:#f5f5f5;
+margin:0;
+padding:0;
+text-align:center;
+}
 
+.container{
+max-width:500px;
+margin:auto;
+background:white;
+padding:30px;
+margin-top:40px;
+border-radius:20px;
+box-shadow:0 0 15px rgba(0,0,0,0.1);
+}
+
+.pet-img{
+width:200px;
+height:200px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:20px;
+}
+
+.btn{
+display:block;
+margin:10px auto;
+padding:15px;
+border-radius:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.whatsapp{
+background:#25D366;
+color:white;
+}
+
+.ligar{
+background:#007BFF;
+color:white;
+}
